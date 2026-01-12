@@ -35,8 +35,23 @@ def get_all_spelers(request):
     alleSpelers_lijst = list(alleSpelers)
     return JsonResponse(alleSpelers_lijst, safe=False)
 
-# update speler: naam veranderen voornaam veranderen of email veranderen
+# punten match toevoegen
 @csrf_exempt
-def update_speler(request, id):
+def match_punten_toevoegen(request):
     data = json.loads(request.body)
-    upd_speler = Speler.objects.get(pk = id)
+    nieuwe_match = Match_punten()
+    nieuwe_match.nummerSpeler = data["nummerSpeler"]
+    nieuwe_match.punten = data["punten"]
+    nieuwe_match.matchCode = data["matchCode"]
+    nieuwe_match.save()
+    return HttpResponse("nieuwe match is toegevoegd")
+
+# punten match terug geven
+def get_all_matches(request):
+    alleMatches = Match_punten.objects.all().values("nummerSpeler", "punten", "matchCode")
+    alleMatches_lijst = list(alleMatches)
+    return JsonResponse(alleMatches_lijst, safe=False)
+
+# filter
+# def matchpunten_resultaat(request):
+#     spelerID = Speler.objects.filter().values()
